@@ -1,8 +1,11 @@
+<link href="css/style.css" rel="stylesheet" type="text/css">
  <?php 
  // Connects to your Database 
+$firstname = $_POST['firstname'];
+$lastname = $_POST['lastname'];
 $email = $_POST['email'];
-$username = $_POST['username'];
-$password = $_POST['pass'];
+$code = $_POST['code'];
+$password = $_POST['password'];
 $hash = md5( rand(0,1000) ); // Generate random 32 character hash and assign it to a local variable.  
 // Example output: f4552671f8909587cf485ea990207f3b   
   
@@ -19,39 +22,11 @@ mysql_connect("localhost", "", "") or die(mysql_error());
  
  //This makes sure they did not leave any fields blank
  
- if (!$_POST['username'] | !$_POST['pass'] | !$_POST['pass2'] | !$_POST['email']) {
+ if (!$_POST['firstname'] | !$_POST['lastname'] | !$_POST['email'] | !$_POST['code'] | !$_POST['password']) {
  
         die('You did not complete all of the required fields');
  
     }
- 
- 
- 
- // checks if the username is in use
- 
-    if (!get_magic_quotes_gpc()) {
- 
-        $_POST['username'] = addslashes($_POST['username']);
- 
-    }
- 
- $usercheck = $_POST['username'];
- 
- $check = mysql_query("SELECT username FROM users WHERE username = '$usercheck'") 
- 
-or die(mysql_error());
- 
- $check2 = mysql_num_rows($check);
- 
- 
- 
- //if the name exists it gives an error
- 
- if ($check2 != 0) {
- 
-        die('Sorry, the username '.$_POST['username'].' is already in use.');
- 
-                }
  
  
  
@@ -84,7 +59,7 @@ or die(mysql_error());
  
  // this makes sure both passwords entered match
  
-    if ($_POST['pass'] != $_POST['pass2']) {
+    if ($_POST['password'] != $_POST['confpassword']) {
  
         die('Your passwords did not match. ');
  
@@ -116,19 +91,21 @@ or die(mysql_error());
  
 $to = "$email";
 $subject = "Your account info";
-$message = "Thank you for registering for Engineer Your Problem. 
+$message = "Thank you for registering for PHSConnect!. 
 ---------------------------------
 Username: $username
  
 Password: $password
+
+After this email, your password will be encrypted and won't be sent in plain text to you. This is to maintain your security in case of an attack.
 ---------------------------------
 Thank you so much for registering!
  
-- The guys at Engineer Your Problem
+- PHSConnect
  
 ----------------------------------------------------------------------------------------------------
  Please do not reply to this email. It goes to a non-existent email box.";
-$from = "noreply@engineeryourproblem.com";
+$from = "noreply@phsconnection.com";
 $headers = "From:" . $from;
 mail($to,$subject,$message,$headers);
      
@@ -147,40 +124,8 @@ mail($to,$subject,$message,$headers);
  else
  {  
  ?>
- 
- 
-  
- <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
- 
- <table border="0">
- 
- <tr><td>Username:</td><td>
- 
- <input type="text" name="username" maxlength="60">
- 
- </td></tr>
- 
- <tr><td>Password:</td><td>
- 
- <input type="password" name="pass" maxlength="15">
- 
- </td></tr>
- 
- <tr><td>Confirm Password:</td><td>
- 
- <input type="password" name="pass2" maxlength="15">
- 
- </td></tr>
-<tr><td>Email</td><td>
- <input type="text" name="email">
-</td></tr>
-<tr><th colspan=2><input type="submit" name="submit"
-value="Register"></th></tr> </table>
- 
- </form>
- 
- 
- <?php
+
+<?php
  
  }
  ?> 
